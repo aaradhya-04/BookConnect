@@ -1,0 +1,13 @@
+<%- include('partials/header') %>
+<h2>All Reviews</h2>
+<ul>
+  <% reviews.forEach(r => { %>
+    <li>
+      <b><%= r.book_title %></b> by <%= r.book_authors %><br>
+      Rating: <%= r.rating %>/5<br>
+      <i>Reviewed by <%= r.username %></i><br>
+      <p><%= r.content %></p>
+    </li>
+  <% }) %>
+</ul>
+<%- include('partials/footer') %>

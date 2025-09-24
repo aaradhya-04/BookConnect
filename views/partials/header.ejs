@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Book Connect</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav>
+  <a href="/">Home</a> |
+  <a href="/reviews">Reviews</a> |
+  <% if (!currentUser) { %>
+    <a href="/signup">Signup</a> |
+    <a href="/login">Login</a>
+  <% } else { %>
+    Welcome <%= currentUser.username %> |
+    <a href="/reviews/add">Add Review</a> |
+    <a href="/logout">Logout</a>
+  <% } %>
+</nav>
+<hr>
+<main>

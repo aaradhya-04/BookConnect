@@ -81,3 +81,7 @@ process.on('unhandledRejection', (reason) => {
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Book Connect running at http://localhost:${PORT}`));
+
+const apiRoutes = require('./routes/apiRoutes');
+app.use('/api', apiRoutes);
+
