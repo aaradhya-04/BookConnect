@@ -47,9 +47,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// Import API routes
+const apiRoutes = require('./routes/apiRoutes');
+
 // Routes
 app.use('/', authRoutes);
 app.use('/reviews', reviewRoutes);
+app.use('/api', apiRoutes);
 
 // 404 handler
 app.use((req, res) => {
@@ -81,7 +85,4 @@ process.on('unhandledRejection', (reason) => {
 // Start server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`🚀 Book Connect running at http://localhost:${PORT}`));
-
-const apiRoutes = require('./routes/apiRoutes');
-app.use('/api', apiRoutes);
 

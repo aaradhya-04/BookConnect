@@ -2,22 +2,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Login - BookConnect</title>
+  <title>Register - BookConnect</title>
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
   <%- include('partials/header') %>
   <main>
-    <h2>Login</h2>
+    <h2>Register</h2>
     <% if (error) { %>
       <p class="error"><%= error %></p>
     <% } %>
-    <form action="/login" method="POST">
+    <form action="/register" method="POST">
+      <label>Username:</label>
+      <input type="text" name="username" required>
       <label>Email:</label>
       <input type="email" name="email" required>
       <label>Password:</label>
       <input type="password" name="password" required>
-      <button type="submit">Login</button>
+      <button type="submit">Register</button>
     </form>
   </main>
   <%- include('partials/footer') %>
