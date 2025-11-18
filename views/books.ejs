@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Books - BookConnect</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>.book-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}.book-card{padding:1rem;border-radius:10px;background:#fff;border:1px solid rgba(0,0,0,0.05)}</style>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <main>
+    <section class="page-heading">
+      <div>
+        <p class="eyebrow">Browse the collection</p>
+        <h2>Curated Bookshelf</h2>
+        <p class="subtext">Select a title to explore community reviews or add your own perspective.</p>
+      </div>
+      <div class="cta-group">
+        <a href="/reviews/add" class="btn">Review a Book</a>
+        <a href="/demo/404-showcase" class="btn btn-secondary">404 Demo</a>
+      </div>
+    </section>
+
+    <form method="GET" action="/books" class="book-filter-form" style="margin-bottom:1.5em;display:flex;gap:0.5em;align-items:center">
+      <input type="text" name="q" placeholder="Search title..." value="<%= filters && filters.q ? filters.q : '' %>" style="flex:1;padding:0.8em;border-radius:8px;border:1px solid #ddd">
+      <input type="text" name="author" placeholder="Author" value="<%= filters && filters.author ? filters.author : '' %>" style="padding:0.8em;border-radius:8px;border:1px solid #ddd">
+      <button class="btn" type="submit">Filter</button>
+      <button class="btn btn-cancel" type="button" id="resetFilters">Reset</button>
+    </form>
+
+    <% if (books && books.length) { %>
+      <div class="book-grid">
+        <% books.forEach(function(book){ %>
+          <div class="book-card">
+            <div class="book-cover">
+              <% if (book.cover_url) { %>
+                <img src="<%= book.cover_url %>" alt="Cover for <%= book.title %>">
+              <% } else { %>
+                <div class="cover-placeholder">
+                  <span><%= (book.title || 'Book')[0] %></span>
+                </div>
+              <% } %>
+            </div>
+            <div class="book-body">
+              <p class="eyebrow"><%= book.authors || 'Unknown Author' %></p>
+              <h3><%= book.title %></h3>
+              <p class="meta">ISBN: <%= book.isbn || 'N/A' %></p>
+              <div class="book-actions">
+                <a href="/books/<%= book.id %>" class="btn-outline">View Details</a>
+                <a href="/reviews/add?title=<%= encodeURIComponent(book.title) %>" class="btn">Review</a>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <p>No books found yet. Try another filter or come back later.</p>
+      </div>
+    <% } %>
+  </main>
+  <%- include('partials/footer') %>
+  <script>
+    (function () {
+      const CACHE_KEY = 'bookconnect:filters';
+      const form = document.querySelector('.book-filter-form');
+      if (!form) return;
+      const qInput = form.querySelector('input[name="q"]');
+      const authorInput = form.querySelector('input[name="author"]');
+      const saved = localStorage.getItem(CACHE_KEY);
+      if (saved && !qInput.value && !authorInput.value) {
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed.q) qInput.value = parsed.q;
+          if (parsed.author) authorInput.value = parsed.author;
+        } catch (e) {
+          localStorage.removeItem(CACHE_KEY);
+        }
+      }
+      const persist = () => {
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ q: qInput.value.trim(), author: authorInput.value.trim() })
+        );
+      };
+      form.addEventListener('submit', persist);
+      form.addEventListener('input', persist);
+      document.getElementById('resetFilters').addEventListener('click', () => {
+        qInput.value = '';
+        authorInput.value = '';
+        localStorage.removeItem(CACHE_KEY);
+        form.submit();
+      });
+    })();
+  </script>
+</body>
+</html>

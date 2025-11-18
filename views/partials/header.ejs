@@ -1,22 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Book Connect</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-<nav>
-  <a href="/">Home</a> |
-  <a href="/reviews">Reviews</a> |
-  <% if (!currentUser) { %>
-    <a href="/signup">Signup</a> |
-    <a href="/login">Login</a>
-  <% } else { %>
-    Welcome <%= currentUser.username %> |
-    <a href="/reviews/add">Add Review</a> |
-    <a href="/logout">Logout</a>
-  <% } %>
-</nav>
-<hr>
-<main>
+<% if (currentUser) { %>
+  <header>
+    <nav>
+      <div class="nav-left">
+        <a href="/">BookConnect</a>
+      </div>
+      <% if (!currentUser.isAdmin) { %>
+        <div style="flex:1;display:flex;justify-content:center">
+          <form action="/books" method="GET" style="width:60%">
+            <input name="q" type="search" placeholder="Search books, authors, ISBN..." style="width:100%;padding:0.6em;border-radius:25px;border:1px solid rgba(0,0,0,0.08)">
+          </form>
+        </div>
+      <% } else { %>
+        <div style="flex:1"></div>
+      <% } %>
+      <div class="nav-right">
+        <% if (currentUser.isAdmin) { %>
+          <a href="/admin">Admin</a>
+        <% } else { %>
+          <a href="/reviews/mine">My Reviews</a>
+        <% } %>
+        <span class="welcome-user-small">Hi, <%= currentUser.username %></span>
+        <a href="/logout">Logout</a>
+      </div>
+    </nav>
+  </header>
+<% } %>
